@@ -36,8 +36,8 @@ const ArticlesList: React.FC = () => {
 
   const retrieveArticles = () => {
     ArticleService.getAll(page)
-      .then((response: any) => {
-        setData(response.data.articles);
+      .then((res) => {
+        setData(res);
         setLoading(false);
         setTotalPages(totalPages);
         setError(null);
@@ -54,8 +54,8 @@ const ArticlesList: React.FC = () => {
 
   const findByTitle = () => {
     ArticleService.findByTitle(searchTitle)
-      .then((response: any) => {
-        setData(response.data.results);
+      .then(res => {
+        setData(res);
       })
       .catch((e: Error) => {
         console.log(e);

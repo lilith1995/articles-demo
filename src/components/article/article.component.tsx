@@ -20,9 +20,10 @@ const Article: React.FC = () => {
   const getArticleById = async (id: any) => {
     if (typeof id === "string") {
       setIsLoading(true);
-      const response = await ArticleService.findById(id);
-      setData(response.data.article);
+      ArticleService.findById(id).then(res => {
+      setData(res);
       setIsLoading(false);
+      });
     }
   };
   useEffect(() => {
