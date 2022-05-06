@@ -2,26 +2,24 @@ import api from "../http-common";
 
 import IArticle from "../types/article.type";
 
-const parseArticlesData = function (data: IArticle[]) {
-  return data.map((article) => {
-    return { id: article.id, title: article.title };
-  });
-};
-
-const getAll = (page: number): Promise<any> => {
-  return new Promise((resolve) =>
-    api
-      .get(`/?page=${page}&per_page=30`)
-      .then((res) => resolve(parseArticlesData(res.data.articles)))
-  );
-};
-
-const parseArticleData = function (data: any) {
+const parseArticleData = function (data: IArticle) {
   return {
     id: data.id,
     title: data.title,
     body: data.body,
   };
+};
+
+const getAll = (page: number): Promise<IArticle[]> => {
+  return new Promise((resolve) =>
+    api.get(`/?page=${page}&per_page=30`).then((res) =>
+      resolve(
+        res.data.articles.map((article: IArticle) => {
+          return parseArticleData(article);
+        })
+      )
+    )
+  );
 };
 
 const findById = (article_id: string): Promise<IArticle> => {
@@ -32,19 +30,20 @@ const findById = (article_id: string): Promise<IArticle> => {
   );
 };
 
-const parseArticlesDataByTitle = function (data: IArticle[]) {
-  return data.map((article) => {
-    return { id: article.id, title: article.title };
-  });
-};
-
 const findByTitle = (title: string): Promise<any> => {
   return new Promise((resolve) =>
     api
-      .get<{ results: IArticle[] }>(`/search?`, {
+      .get(`/search?`, {
         params: { query: title },
       })
-      .then((res) => resolve(parseArticlesDataByTitle(res.data.results)))
+      .then((res) => resolve(
+        resolve(
+          res.data.results.map((article: IArticle) => {
+            return parseArticleData(article);
+          })
+        )
+      )
+    )
   );
 };
 
